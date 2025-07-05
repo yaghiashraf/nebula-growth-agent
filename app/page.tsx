@@ -31,6 +31,7 @@ import InteractiveDemo from '../components/interactive-demo';
 export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [showDemo, setShowDemo] = useState(false);
 
   const testimonials = [
     {
@@ -168,7 +169,10 @@ export default function LandingPage() {
                   Start Free Trial
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </button>
-                <button className="border border-border-dark text-text-dark px-8 py-4 rounded-xl text-lg font-semibold hover:bg-surface-dark transition-colors flex items-center">
+                <button 
+                  onClick={() => setShowDemo(true)}
+                  className="border border-border-dark text-text-dark px-8 py-4 rounded-xl text-lg font-semibold hover:bg-surface-dark transition-colors flex items-center"
+                >
                   <Play className="w-5 h-5 mr-2" />
                   Watch Demo
                 </button>
@@ -548,6 +552,268 @@ export default function LandingPage() {
       </section>
 
       <Footer />
+
+      {/* Demo Modal */}
+      {showDemo && (
+        <DemoModal onClose={() => setShowDemo(false)} />
+      )}
+    </div>
+  );
+}
+
+// Demo Modal Component
+function DemoModal({ onClose }: { onClose: () => void }) {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  const demoSteps = [
+    {
+      title: "🔍 AI Scans Your Website",
+      description: "Nebula's AI crawls your site and identifies optimization opportunities",
+      visual: "scanning",
+      duration: 3000
+    },
+    {
+      title: "📊 Analyzes Performance Data", 
+      description: "Deep analysis of Core Web Vitals, SEO metrics, and user behavior",
+      visual: "analyzing",
+      duration: 3000
+    },
+    {
+      title: "🎯 Generates Smart Suggestions",
+      description: "AI creates specific, actionable improvements with revenue estimates",
+      visual: "suggestions",
+      duration: 3000
+    },
+    {
+      title: "⚡ Auto-Implements Changes",
+      description: "Creates GitHub PRs with optimized code ready for deployment",
+      visual: "deployment",
+      duration: 3000
+    },
+    {
+      title: "📈 Tracks Results",
+      description: "Monitors performance improvements and ROI in real-time",
+      visual: "tracking",
+      duration: 3000
+    }
+  ];
+
+  useEffect(() => {
+    if (!isPlaying) return;
+
+    const timer = setInterval(() => {
+      setCurrentStep((prev) => (prev + 1) % demoSteps.length);
+    }, demoSteps[currentStep].duration);
+
+    return () => clearInterval(timer);
+  }, [currentStep, isPlaying, demoSteps]);
+
+  const renderVisual = (visual: string) => {
+    const baseClasses = "w-full h-64 rounded-xl flex items-center justify-center transition-all duration-1000";
+    
+    switch (visual) {
+      case "scanning":
+        return (
+          <div className={`${baseClasses} bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-blue-500/30`}>
+            <div className="relative">
+              <Globe className="w-24 h-24 text-blue-400 animate-pulse" />
+              <div className="absolute -inset-4 border-2 border-blue-400 rounded-full animate-ping opacity-30"></div>
+              <div className="absolute -inset-8 border border-blue-400 rounded-full animate-spin opacity-20"></div>
+            </div>
+          </div>
+        );
+      case "analyzing":
+        return (
+          <div className={`${baseClasses} bg-gradient-to-br from-green-500/20 to-teal-500/20 border border-green-500/30`}>
+            <div className="grid grid-cols-3 gap-4">
+              {[...Array(9)].map((_, i) => (
+                <div 
+                  key={i}
+                  className="w-8 h-8 bg-green-400 rounded animate-pulse"
+                  style={{ animationDelay: `${i * 0.2}s` }}
+                ></div>
+              ))}
+            </div>
+          </div>
+        );
+      case "suggestions":
+        return (
+          <div className={`${baseClasses} bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-500/30`}>
+            <div className="space-y-4 w-full max-w-md">
+              {[...Array(3)].map((_, i) => (
+                <div 
+                  key={i}
+                  className="flex items-center space-x-3 p-3 bg-yellow-400/20 rounded-lg transform transition-all duration-500"
+                  style={{ 
+                    transform: `translateX(${i * 10}px)`,
+                    animationDelay: `${i * 0.3}s`
+                  }}
+                >
+                  <Target className="w-6 h-6 text-yellow-400" />
+                  <div className="flex-1 h-3 bg-yellow-400/40 rounded animate-pulse"></div>
+                  <span className="text-yellow-400 font-bold">+${(i + 1) * 150}/mo</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      case "deployment":
+        return (
+          <div className={`${baseClasses} bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30`}>
+            <div className="relative">
+              <GitPullRequest className="w-24 h-24 text-purple-400" />
+              <div className="absolute -top-4 -right-4">
+                <Rocket className="w-12 h-12 text-pink-400 animate-bounce" />
+              </div>
+              <div className="absolute -bottom-4 -left-4">
+                <Check className="w-8 h-8 text-green-400 animate-pulse" />
+              </div>
+            </div>
+          </div>
+        );
+      case "tracking":
+        return (
+          <div className={`${baseClasses} bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30`}>
+            <div className="relative w-full max-w-md">
+              <BarChart3 className="w-24 h-24 text-emerald-400 mx-auto" />
+              <div className="absolute top-0 right-0">
+                <TrendingUp className="w-8 h-8 text-emerald-400 animate-pulse" />
+              </div>
+              <div className="mt-4 flex justify-center space-x-2">
+                {[...Array(5)].map((_, i) => (
+                  <div 
+                    key={i}
+                    className="w-3 bg-emerald-400 rounded-t animate-bounce"
+                    style={{ 
+                      height: `${(i + 1) * 8}px`,
+                      animationDelay: `${i * 0.1}s`
+                    }}
+                  ></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      default:
+        return <div className={baseClasses}></div>;
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="bg-surface-dark border border-border-dark rounded-2xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-500">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-2xl font-bold text-dark-50 mb-2">
+              ✨ See Nebula in Action
+            </h2>
+            <p className="text-text-dark-secondary">
+              Watch how Nebula transforms your website automatically
+            </p>
+          </div>
+          <button 
+            onClick={onClose}
+            className="text-text-dark-secondary hover:text-dark-50 transition-colors p-2"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Demo Content */}
+        <div className="space-y-8">
+          {/* Current Step Display */}
+          <div className="text-center">
+            <div className="inline-flex items-center space-x-2 bg-gradient-primary px-4 py-2 rounded-full text-white font-semibold mb-4">
+              <span>Step {currentStep + 1} of {demoSteps.length}</span>
+            </div>
+            <h3 className="text-xl font-semibold text-dark-50 mb-2">
+              {demoSteps[currentStep].title}
+            </h3>
+            <p className="text-text-dark-secondary max-w-2xl mx-auto">
+              {demoSteps[currentStep].description}
+            </p>
+          </div>
+
+          {/* Visual Demo */}
+          <div className="relative">
+            {renderVisual(demoSteps[currentStep].visual)}
+            
+            {/* Progress Bar */}
+            <div className="mt-6 w-full bg-surface-dark border border-border-dark rounded-full h-2">
+              <div 
+                className="bg-gradient-primary h-2 rounded-full transition-all duration-300 ease-out"
+                style={{ 
+                  width: `${((currentStep + 1) / demoSteps.length) * 100}%` 
+                }}
+              ></div>
+            </div>
+          </div>
+
+          {/* Step Navigation */}
+          <div className="flex justify-center space-x-2">
+            {demoSteps.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentStep(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === currentStep 
+                    ? 'bg-gradient-primary scale-125' 
+                    : index < currentStep
+                    ? 'bg-success-dark'
+                    : 'bg-border-dark hover:bg-text-dark-secondary'
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Controls */}
+          <div className="flex items-center justify-center space-x-4">
+            <button
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="flex items-center space-x-2 bg-gradient-primary text-white px-6 py-3 rounded-xl hover:opacity-90 transition-all font-semibold"
+            >
+              {isPlaying ? (
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6" />
+                  </svg>
+                  <span>Pause</span>
+                </>
+              ) : (
+                <>
+                  <Play className="w-5 h-5" />
+                  <span>Play</span>
+                </>
+              )}
+            </button>
+            
+            <button
+              onClick={() => setCurrentStep(0)}
+              className="flex items-center space-x-2 border border-border-dark text-text-dark px-6 py-3 rounded-xl hover:bg-surface-dark transition-colors font-semibold"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <span>Restart</span>
+            </button>
+          </div>
+
+          {/* CTA */}
+          <div className="text-center pt-4 border-t border-border-dark">
+            <p className="text-text-dark-secondary mb-4">
+              Ready to see these results on your website?
+            </p>
+            <button className="bg-gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-all transform hover:scale-105 flex items-center mx-auto">
+              Start Free Trial
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
