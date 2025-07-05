@@ -272,7 +272,7 @@ export default function PricingCheckout({ planType, onCheckout }: PricingCheckou
         ) : (
           <>
             {currentPlan.cta}
-            {currentPrice.priceId !== 'contact_sales' && currentPrice.price > 0 && (
+            {currentPrice.priceId !== 'contact_sales' && currentPrice.price !== null && currentPrice.price > 0 && (
               <ArrowRight className="w-5 h-5 ml-2" />
             )}
           </>

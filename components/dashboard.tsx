@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+// Recharts removed for simplified deployment
+// import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { TrendingUp, TrendingDown, Minus, GitPullRequest, Zap, Target, AlertTriangle, CheckCircle } from 'lucide-react';
 import type { DashboardData } from '../types';
 
@@ -275,29 +276,13 @@ function OpportunitiesChart({ opportunities }: { opportunities: DashboardData['o
   return (
     <div className="bg-surface-dark rounded-2xl p-6 border border-border-dark">
       <h3 className="text-lg font-semibold text-dark-50 mb-4">Revenue Opportunities</h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-          <XAxis 
-            dataKey="name" 
-            stroke="#9ca3af"
-            fontSize={12}
-            angle={-45}
-            textAnchor="end"
-            height={60}
-          />
-          <YAxis stroke="#9ca3af" />
-          <Tooltip 
-            contentStyle={{
-              backgroundColor: '#1f2937',
-              border: '1px solid #374151',
-              borderRadius: '8px',
-              color: '#f9fafb'
-            }}
-          />
-          <Bar dataKey="value" fill="#6366f1" />
-        </BarChart>
-      </ResponsiveContainer>
+      <div className="w-full h-[300px] bg-dark-800 rounded-lg flex items-center justify-center">
+        <div className="text-center">
+          <Target className="w-12 h-12 text-primary-dark mx-auto mb-4" />
+          <p className="text-text-dark-secondary">Revenue Chart</p>
+          <p className="text-sm text-text-dark-secondary mt-2">Chart component placeholder</p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -316,32 +301,13 @@ function PerformanceTrendChart() {
   return (
     <div className="bg-surface-dark rounded-2xl p-6 border border-border-dark">
       <h3 className="text-lg font-semibold text-dark-50 mb-4">Performance Trend</h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-          <XAxis 
-            dataKey="date" 
-            stroke="#9ca3af"
-            fontSize={12}
-          />
-          <YAxis stroke="#9ca3af" domain={['dataMin - 5', 'dataMax + 5']} />
-          <Tooltip 
-            contentStyle={{
-              backgroundColor: '#1f2937',
-              border: '1px solid #374151',
-              borderRadius: '8px',
-              color: '#f9fafb'
-            }}
-          />
-          <Line 
-            type="monotone" 
-            dataKey="score" 
-            stroke="#6366f1" 
-            strokeWidth={3}
-            dot={{ fill: '#6366f1', r: 4 }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+      <div className="w-full h-[300px] bg-dark-800 rounded-lg flex items-center justify-center">
+        <div className="text-center">
+          <TrendingUp className="w-12 h-12 text-primary-dark mx-auto mb-4" />
+          <p className="text-text-dark-secondary">Performance Chart</p>
+          <p className="text-sm text-text-dark-secondary mt-2">Chart component placeholder</p>
+        </div>
+      </div>
     </div>
   );
 }

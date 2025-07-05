@@ -39,7 +39,7 @@ export default function PainPointShowcase({ painPoints }: PainPointShowcaseProps
     <section className="py-20 bg-gradient-to-br from-dark-950 to-dark-900 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23ef4444" fill-opacity="0.1"%3E%3Cpath d="M0 0h100v100H0z" fill="none"/%3E%3Cpath d="M50 0v100M0 50h100" stroke="%23ef4444" stroke-width="0.5"/%3E%3C/g%3E%3C/svg%3E')]" />
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%22100%22%20height%3D%22100%22%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http://www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22%2523ef4444%22%20fill-opacity%3D%220.1%22%3E%3Cpath%20d%3D%22M0%200h100v100H0z%22%20fill%3D%22none%22/%3E%3Cpath%20d%3D%22M50%200v100M0%2050h100%22%20stroke%3D%22%2523ef4444%22%20stroke-width%3D%220.5%22/%3E%3C/g%3E%3C/svg%3E')]" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6">

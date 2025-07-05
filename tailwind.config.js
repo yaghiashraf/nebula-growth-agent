@@ -99,8 +99,7 @@ module.exports = {
     },
   },
   plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
+    // Removed forms and typography plugins for simplified deployment
     // Custom plugin for dark mode utilities
     function({ addUtilities }) {
       const newUtilities = {

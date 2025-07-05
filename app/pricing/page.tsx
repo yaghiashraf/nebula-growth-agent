@@ -145,8 +145,8 @@ export default function PricingPage() {
     return `$${price}`;
   };
 
-  const calculateYearlySavings = (monthly: number, yearly: number) => {
-    if (monthly === 0 || yearly === 0) return 0;
+  const calculateYearlySavings = (monthly: number | null, yearly: number | null) => {
+    if (!monthly || !yearly || monthly === 0 || yearly === 0) return 0;
     const monthlyCost = monthly * 12;
     return Math.round(((monthlyCost - yearly) / monthlyCost) * 100);
   };
