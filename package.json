@@ -4,9 +4,10 @@
   "description": "Autonomous detect-decide-deploy platform for website growth optimization",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc && npm run build:functions",
+    "build": "next build",
     "build:functions": "netlify-lambda build netlify/functions",
-    "dev": "concurrently \"tsc --watch\" \"netlify dev\"",
+    "dev": "next dev",
+    "start": "next start",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -51,7 +52,9 @@
     "lucide-react": "^0.303.0",
     "recharts": "^2.8.0",
     "react-hook-form": "^7.48.2",
-    "react-query": "^3.39.3"
+    "react-query": "^3.39.3",
+    "stripe": "^14.10.0",
+    "@netlify/functions": "^2.4.1"
   },
   "devDependencies": {
     "@types/node": "^20.10.5",

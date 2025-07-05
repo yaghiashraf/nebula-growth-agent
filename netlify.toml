@@ -15,16 +15,6 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Scheduled function for nightly crawls
-[[functions]]
-  path = "netlify/functions/nightly"
-  schedule = "0 2 * * *"  # Run at 2 AM daily
-  timeout = 900  # 15 minutes
-
-[[functions]]
-  path = "netlify/functions/deploy-hook"
-  timeout = 300  # 5 minutes
-
 # Redirects for SPA routing
 [[redirects]]
   from = "/api/*"

@@ -25,11 +25,7 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      {
-        source: '/',
-        destination: '/dashboard',
-        permanent: false,
-      },
+      // No homepage redirect - show landing page
     ];
   },
   async headers() {
