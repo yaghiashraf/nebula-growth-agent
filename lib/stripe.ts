@@ -1,6 +1,12 @@
 import Stripe from 'stripe';
-import { logger } from './logger';
-import { config } from './config';
+
+// Simple logger fallback
+const logger = {
+  info: console.log,
+  error: console.error,
+  warn: console.warn,
+  debug: console.log,
+};
 
 // Initialize Stripe
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
