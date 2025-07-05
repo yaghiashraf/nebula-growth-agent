@@ -1,6 +1,6 @@
 import { Handler } from '@netlify/functions';
 // Simplified fallbacks for deployment
-const db = { client: { website: { findMany: async () => [] } } };
+const db = { client: { website: { findMany: async (...args: any[]) => [] } } };
 const logger = { info: console.log, error: console.error };
 const performanceLogger = { logExecution: async () => {} };
 
@@ -9,9 +9,7 @@ class WebCrawler { async crawlSite() { return {}; } }
 class GA4Client { async detectAnomalies() { return []; } }
 class RAGEngine { async analyzeAndRank() { return []; } }
 class GitHubPatcher { async createPullRequest() { return {}; } }
-import type { NetlifyFunctionEvent, NetlifyFunctionContext } from '../../types';
-
-export const handler: Handler = async (event: NetlifyFunctionEvent, context: NetlifyFunctionContext) => {
+export const handler: Handler = async (event, context) => {
   const endTimer = performanceLogger.start('nightly-cron');
   
   try {

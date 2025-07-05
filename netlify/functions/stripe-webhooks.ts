@@ -6,15 +6,15 @@ import { StripeService } from '../../lib/stripe';
 const db = {
   client: {
     user: {
-      update: async () => ({}),
-      findUnique: async () => ({}),
+      update: async (...args: any[]) => ({}),
+      findUnique: async (...args: any[]) => ({}),
     },
     subscription: {
-      create: async () => ({}),
-      update: async () => ({}),
+      create: async (...args: any[]) => ({}),
+      update: async (...args: any[]) => ({}),
     },
   },
-  trackAnalytics: async () => ({}),
+  trackAnalytics: async (...args: any[]) => ({}),
 };
 
 const logger = {
@@ -22,9 +22,7 @@ const logger = {
   error: console.error,
   warn: console.warn,
 };
-import type { NetlifyFunctionEvent, NetlifyFunctionContext } from '../../types';
-
-export const handler: Handler = async (event: NetlifyFunctionEvent, context: NetlifyFunctionContext) => {
+export const handler: Handler = async (event, context) => {
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
