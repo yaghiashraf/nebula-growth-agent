@@ -1,0 +1,50 @@
+#!/bin/bash
+
+echo "🚀 Nebula Growth Agent - GitHub Deployment Script"
+echo "=================================================="
+
+# Check if git is initialized
+if [ ! -d ".git" ]; then
+    echo "❌ Git repository not found. Please run this script from the project root."
+    exit 1
+fi
+
+# Instructions for manual deployment
+echo ""
+echo "📋 Manual Deployment Instructions:"
+echo ""
+echo "1. Create a new repository at: https://github.com/yaghiashraf/nebula-growth-agent"
+echo ""
+echo "2. Run the following commands in your terminal:"
+echo ""
+echo "   git remote add origin https://github.com/yaghiashraf/nebula-growth-agent.git"
+echo "   git push -u origin main"
+echo ""
+echo "3. Or use GitHub CLI if installed:"
+echo ""
+echo "   gh repo create yaghiashraf/nebula-growth-agent --public --push --source=."
+echo ""
+echo "4. Set up Netlify deployment:"
+echo "   - Connect your GitHub repo to Netlify"
+echo "   - Set build command: npm run build"
+echo "   - Set publish directory: .next"
+echo "   - Add environment variables from .env.example"
+echo ""
+echo "🔧 Required Environment Variables:"
+echo "   - OPENAI_API_KEY (for AI embeddings)"
+echo "   - CLAUDE_API_KEY (for AI reasoning)"
+echo "   - GITHUB_APP_ID (for PR automation)"
+echo "   - GITHUB_PRIVATE_KEY (for GitHub integration)"
+echo "   - DATABASE_URL (Turso SQLite database)"
+echo ""
+echo "✅ Your repository is ready for deployment!"
+echo "   Repository URL: https://github.com/yaghiashraf/nebula-growth-agent"
+echo ""
+echo "🎯 Next Steps:"
+echo "   1. Push to GitHub (see commands above)"
+echo "   2. Deploy to Netlify"
+echo "   3. Set up environment variables"
+echo "   4. Configure GitHub App for PR automation"
+echo "   5. Add your first website for optimization"
+echo ""
+echo "📚 Documentation: See README.md for detailed setup instructions"
