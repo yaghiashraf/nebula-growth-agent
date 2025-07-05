@@ -1,0 +1,396 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Custom CSS Variables */
+:root {
+  --font-inter: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-inter);
+  font-feature-settings: 'cv11', 'ss01';
+  font-variation-settings: 'opsz' 32;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark mode specific styles */
+.dark {
+  color-scheme: dark;
+}
+
+/* High contrast mode support */
+.high-contrast {
+  --tw-text-opacity: 1;
+  --tw-bg-opacity: 1;
+}
+
+.high-contrast .text-text-dark-secondary {
+  @apply text-white;
+}
+
+.high-contrast .bg-dark-800 {
+  @apply bg-black;
+}
+
+/* Reduced motion support */
+.reduce-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Focus styles for accessibility */
+.keyboard-navigation *:focus {
+  @apply outline-none ring-2 ring-primary-dark ring-offset-2 ring-offset-dark-900;
+}
+
+.keyboard-navigation button:focus,
+.keyboard-navigation a:focus,
+.keyboard-navigation input:focus,
+.keyboard-navigation select:focus,
+.keyboard-navigation textarea:focus {
+  @apply ring-2 ring-primary-dark ring-offset-2 ring-offset-dark-900;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-dark-500;
+}
+
+/* Firefox scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: theme('colors.dark.600') theme('colors.dark.900');
+}
+
+/* Selection styles */
+::selection {
+  @apply bg-primary-dark text-white;
+}
+
+::-moz-selection {
+  @apply bg-primary-dark text-white;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px theme('colors.primary.dark');
+  }
+  50% {
+    box-shadow: 0 0 20px theme('colors.primary.dark'), 0 0 30px theme('colors.primary.dark');
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Utility classes */
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Text gradient utility */
+.text-gradient {
+  background: linear-gradient(135deg, theme('colors.primary.dark'), theme('colors.secondary.dark'));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Glass effect utility */
+.glass-effect {
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Button styles */
+.btn-primary {
+  @apply bg-gradient-primary text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-all transform hover:scale-105 focus:scale-105;
+}
+
+.btn-secondary {
+  @apply border border-border-dark text-text-dark px-6 py-3 rounded-xl font-semibold hover:bg-surface-dark transition-colors;
+}
+
+.btn-ghost {
+  @apply text-text-dark hover:text-dark-50 transition-colors;
+}
+
+/* Card styles */
+.card {
+  @apply bg-surface-dark rounded-2xl border border-border-dark;
+}
+
+.card-hover {
+  @apply card hover:border-primary-dark transition-all hover:transform hover:scale-105;
+}
+
+/* Typography enhancements */
+h1, h2, h3, h4, h5, h6 {
+  font-feature-settings: 'cv11', 'ss01';
+  font-variation-settings: 'opsz' 32;
+}
+
+/* Loading states */
+.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Skeleton loaders */
+.skeleton {
+  @apply bg-dark-800 animate-pulse rounded;
+}
+
+.skeleton-text {
+  @apply skeleton h-4 mb-2;
+}
+
+.skeleton-title {
+  @apply skeleton h-6 mb-4;
+}
+
+.skeleton-avatar {
+  @apply skeleton w-12 h-12 rounded-full;
+}
+
+/* Error states */
+.error-state {
+  @apply text-error-dark bg-error-dark/10 border border-error-dark/20 rounded-xl p-4;
+}
+
+.success-state {
+  @apply text-success-dark bg-success-dark/10 border border-success-dark/20 rounded-xl p-4;
+}
+
+.warning-state {
+  @apply text-warning-dark bg-warning-dark/10 border border-warning-dark/20 rounded-xl p-4;
+}
+
+/* Form styles */
+input, textarea, select {
+  @apply bg-dark-800 border border-border-dark rounded-xl px-4 py-3 text-dark-50 placeholder-text-dark-secondary focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent transition-colors;
+}
+
+input:invalid, textarea:invalid {
+  @apply border-error-dark focus:ring-error-dark;
+}
+
+label {
+  @apply text-sm font-medium text-dark-50 mb-2 block;
+}
+
+/* Table styles */
+table {
+  @apply w-full border-collapse;
+}
+
+th {
+  @apply text-left text-sm font-semibold text-dark-50 py-3 px-4 border-b border-border-dark;
+}
+
+td {
+  @apply text-sm text-text-dark-secondary py-3 px-4 border-b border-border-dark/50;
+}
+
+tr:hover td {
+  @apply bg-dark-800/50;
+}
+
+/* Code blocks */
+pre, code {
+  font-family: var(--font-mono);
+  font-feature-settings: 'liga', 'calt';
+}
+
+pre {
+  @apply bg-dark-800 rounded-xl p-4 overflow-x-auto text-sm border border-border-dark;
+}
+
+code {
+  @apply bg-dark-800 px-2 py-1 rounded text-sm;
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  .text-responsive-xl {
+    @apply text-2xl;
+  }
+  
+  .text-responsive-2xl {
+    @apply text-3xl;
+  }
+  
+  .text-responsive-3xl {
+    @apply text-4xl;
+  }
+  
+  .text-responsive-4xl {
+    @apply text-5xl;
+  }
+}
+
+/* Print styles */
+@media print {
+  * {
+    color: black !important;
+    background: white !important;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only.focus:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Custom properties for dynamic theming */
+.theme-custom {
+  --primary: var(--custom-primary, theme('colors.primary.dark'));
+  --secondary: var(--custom-secondary, theme('colors.secondary.dark'));
+  --background: var(--custom-background, theme('colors.background.dark'));
+  --surface: var(--custom-surface, theme('colors.surface.dark'));
+  --text: var(--custom-text, theme('colors.text.dark'));
+}
+
+/* Performance optimizations */
+.gpu-accelerated {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin {
+    animation: none;
+  }
+  
+  .animate-pulse {
+    animation: none;
+  }
+  
+  .animate-bounce {
+    animation: none;
+  }
+}
+
+/* Dark mode image adjustments */
+.dark img {
+  opacity: 0.9;
+}
+
+.dark img:hover {
+  opacity: 1;
+}
+
+/* Focus within styles for compound components */
+.focus-within:focus-within {
+  @apply ring-2 ring-primary-dark ring-offset-2 ring-offset-dark-900;
+}

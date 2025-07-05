@@ -1,0 +1,67 @@
+[build]
+  base = "."
+  publish = ".next"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_VERSION = "10"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "nft"
+  external_node_modules = ["playwright", "lighthouse", "chrome-launcher"]
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Scheduled function for nightly crawls
+[[functions]]
+  path = "netlify/functions/nightly"
+  schedule = "0 2 * * *"  # Run at 2 AM daily
+  timeout = 900  # 15 minutes
+
+[[functions]]
+  path = "netlify/functions/deploy-hook"
+  timeout = 300  # 5 minutes
+
+# Redirects for SPA routing
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers for security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+
+# Environment variables (these should be set in Netlify dashboard)
+[context.production.environment]
+  NODE_ENV = "production"
+  NEXT_TELEMETRY_DISABLED = "1"
+
+[context.deploy-preview.environment]
+  NODE_ENV = "development"
+  NEXT_TELEMETRY_DISABLED = "1"
+
+[context.branch-deploy.environment]
+  NODE_ENV = "development"
+  NEXT_TELEMETRY_DISABLED = "1"

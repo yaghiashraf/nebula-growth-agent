@@ -1,0 +1,255 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  passwordHash  String
+  plan          PlanType @default(STARTER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relationships
+  sites         Site[]
+  apiKeys       ApiKey[]
+  
+  // Plan limits
+  maxSites      Int      @default(1)
+  maxPages      Int      @default(50)
+  scanFrequency String   @default("weekly") // weekly, nightly, hourly
+  
+  @@map("users")
+}
+
+model Site {
+  id          String   @id @default(cuid())
+  url         String
+  name        String
+  userId      String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Site configuration
+  autoMerge   Boolean  @default(false)
+  maxPages    Int      @default(50)
+  
+  // GitHub integration
+  githubRepo  String?
+  githubOwner String?
+  githubToken String?
+  
+  // GA4 integration
+  ga4MeasurementId String?
+  ga4ApiSecret     String?
+  
+  // Relationships
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  crawls      Crawl[]
+  competitors Competitor[]
+  opportunities Opportunity[]
+  deployments Deployment[]
+  
+  @@unique([userId, url])
+  @@map("sites")
+}
+
+model Competitor {
+  id        String   @id @default(cuid())
+  url       String
+  name      String
+  siteId    String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relationships
+  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  crawls    Crawl[]
+  
+  @@unique([siteId, url])
+  @@map("competitors")
+}
+
+model Crawl {
+  id           String   @id @default(cuid())
+  url          String
+  title        String?
+  content      String
+  htmlContent  String
+  metaDescription String?
+  statusCode   Int
+  loadTime     Float
+  contentSize  Int
+  crawledAt    DateTime @default(now())
+  
+  // Performance metrics
+  lighthouseScore    Float?
+  performanceScore   Float?
+  accessibilityScore Float?
+  bestPracticesScore Float?
+  seoScore          Float?
+  clsScore          Float?
+  lcpScore          Float?
+  fcpScore          Float?
+  
+  // Relationships
+  siteId       String?
+  competitorId String?
+  site         Site?       @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  competitor   Competitor? @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  embeddings   Embedding[]
+  
+  @@map("crawls")
+}
+
+model Embedding {
+  id        String   @id @default(cuid())
+  crawlId   String
+  content   String
+  vector    String   // JSON array of floats
+  createdAt DateTime @default(now())
+  
+  // Relationships
+  crawl     Crawl    @relation(fields: [crawlId], references: [id], onDelete: Cascade)
+  
+  @@map("embeddings")
+}
+
+model Opportunity {
+  id              String           @id @default(cuid())
+  siteId          String
+  title           String
+  description     String
+  type            OpportunityType
+  priority        PriorityLevel
+  status          OpportunityStatus @default(PENDING)
+  revenueDelta    Float            @default(0)
+  
+  // Fix details
+  targetUrl       String?
+  currentContent  String?
+  suggestedContent String?
+  patchData       String?          // JSON with patch details
+  
+  // AI reasoning
+  reasoning       String?
+  confidence      Float            @default(0)
+  
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  
+  // Relationships
+  site            Site             @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  deployments     Deployment[]
+  
+  @@map("opportunities")
+}
+
+model Deployment {
+  id             String           @id @default(cuid())
+  opportunityId  String
+  siteId         String
+  prNumber       Int?
+  prUrl          String?
+  prTitle        String?
+  prDescription  String?
+  status         DeploymentStatus @default(PENDING)
+  
+  // Performance tracking
+  beforeScore    Float?
+  afterScore     Float?
+  performanceDelta Float?
+  
+  // Timestamps
+  createdAt      DateTime         @default(now())
+  deployedAt     DateTime?
+  rolledBackAt   DateTime?
+  
+  // Relationships
+  opportunity    Opportunity      @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  site           Site             @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  
+  @@map("deployments")
+}
+
+model ApiKey {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  key       String   @unique
+  isActive  Boolean  @default(true)
+  lastUsed  DateTime?
+  createdAt DateTime @default(now())
+  
+  // Relationships
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("api_keys")
+}
+
+model Analytics {
+  id            String   @id @default(cuid())
+  siteId        String?
+  event         String
+  data          String   // JSON data
+  timestamp     DateTime @default(now())
+  
+  // GA4 integration
+  clientId      String?
+  sessionId     String?
+  userId        String?
+  
+  @@map("analytics")
+}
+
+// Enums
+enum PlanType {
+  STARTER
+  PRO
+  AGENCY
+  ENTERPRISE
+}
+
+enum OpportunityType {
+  COPY_TWEAK
+  SEO_OPTIMIZATION
+  PERFORMANCE_FIX
+  UX_IMPROVEMENT
+  SGE_ANSWER_BLOCK
+  FAQ_SCHEMA
+  IMAGE_OPTIMIZATION
+  LOYALTY_PASS
+  COMPETITOR_RESPONSE
+}
+
+enum PriorityLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum OpportunityStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+  ROLLED_BACK
+}
+
+enum DeploymentStatus {
+  PENDING
+  CREATING_PR
+  PR_CREATED
+  DEPLOYED
+  FAILED
+  ROLLED_BACK
+}

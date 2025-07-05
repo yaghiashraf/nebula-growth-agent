@@ -1,0 +1,344 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '20'
+  DATABASE_URL: 'file:./test.db'
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+  GITHUB_APP_ID: ${{ secrets.GITHUB_APP_ID }}
+  GITHUB_PRIVATE_KEY: ${{ secrets.GITHUB_PRIVATE_KEY }}
+
+jobs:
+  lint-and-typecheck:
+    name: Lint and Type Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npm run db:generate
+
+      - name: Run ESLint
+        run: npm run lint:check
+
+      - name: Check TypeScript types
+        run: npm run typecheck
+
+      - name: Check Prettier formatting
+        run: npm run format:check
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npm run db:generate
+
+      - name: Run unit tests
+        run: npm run test:coverage
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: nebula_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup test database
+        env:
+          DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/nebula_test'
+        run: |
+          npm run db:generate
+          npm run db:push
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run integration tests
+        env:
+          DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/nebula_test'
+        run: npm run test:e2e
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level high
+
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+
+  lighthouse-audit:
+    name: Lighthouse Performance Audit
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000
+
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.12.x
+          lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, unit-tests, integration-tests, security-scan]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npm run db:generate
+
+      - name: Build application
+        run: npm run build
+
+      - name: Deploy to Netlify (Staging)
+        if: github.ref == 'refs/heads/develop'
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --prod --dir=.next
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STAGING_SITE_ID }}
+
+      - name: Deploy to Netlify (Production)
+        if: github.ref == 'refs/heads/main'
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --prod --dir=.next
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_PRODUCTION_SITE_ID }}
+
+      - name: Create deployment notification
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          channel: '#deployments'
+          message: |
+            🚀 Nebula Growth Agent deployed successfully!
+            
+            **Environment:** ${{ github.ref == 'refs/heads/main' && 'Production' || 'Staging' }}
+            **Commit:** ${{ github.sha }}
+            **Author:** ${{ github.actor }}
+            
+            [View Deployment](${{ steps.deploy.outputs.deploy-url }})
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  notify-failure:
+    name: Notify on Failure
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, unit-tests, integration-tests, security-scan, build-and-deploy]
+    if: failure()
+    
+    steps:
+      - name: Create failure notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          channel: '#alerts'
+          message: |
+            ❌ Nebula Growth Agent CI/CD pipeline failed!
+            
+            **Branch:** ${{ github.ref }}
+            **Commit:** ${{ github.sha }}
+            **Author:** ${{ github.actor }}
+            **Failed Job:** ${{ needs.*.result }}
+            
+            [View Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  database-migration:
+    name: Database Migration
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: [build-and-deploy]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run database migrations
+        env:
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+        run: |
+          npm run db:generate
+          npm run db:migrate
+
+  performance-monitoring:
+    name: Performance Monitoring
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: [database-migration]
+    
+    steps:
+      - name: Run performance checks
+        run: |
+          # Run synthetic performance tests against production
+          curl -f ${{ secrets.PRODUCTION_URL }}/api/health || exit 1
+          
+          # Check if performance meets thresholds
+          npx lighthouse ${{ secrets.PRODUCTION_URL }} \
+            --chrome-flags="--headless" \
+            --output=json \
+            --output-path=lighthouse-results.json
+          
+          # Parse results and fail if below threshold
+          node -e "
+            const results = require('./lighthouse-results.json');
+            const score = results.categories.performance.score;
+            if (score < 0.9) {
+              console.error('Performance score too low:', score);
+              process.exit(1);
+            }
+            console.log('Performance check passed:', score);
+          "
+
+      - name: Create performance alert
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          channel: '#alerts'
+          message: |
+            ⚠️ Performance regression detected in production!
+            
+            Lighthouse score below threshold (0.9)
+            Please investigate immediately.
+            
+            [View Deployment](${{ secrets.PRODUCTION_URL }})
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
