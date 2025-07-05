@@ -55,22 +55,31 @@ export default function Dashboard({ siteId }: DashboardProps) {
           {
             id: '1',
             title: 'Add competitor price comparison widget',
-            priority: 'HIGH',
+            description: 'Add widget to compare prices with competitors',
+            type: 'CONVERSION' as const,
+            priority: 'HIGH' as const,
             revenueDelta: 890,
+            confidence: 0.85,
             status: 'PENDING',
           },
           {
             id: '2',
             title: 'Optimize mobile checkout flow',
-            priority: 'HIGH',
+            description: 'Improve mobile checkout conversion',
+            type: 'UX' as const,
+            priority: 'HIGH' as const,
             revenueDelta: 1200,
-            status: 'IN_PROGRESS',
+            confidence: 0.92,
+            status: 'PENDING',
           },
           {
             id: '3',
             title: 'Create loyalty program landing page',
-            priority: 'MEDIUM',
+            description: 'Build dedicated landing page for loyalty program',
+            type: 'CONTENT' as const,
+            priority: 'MEDIUM' as const,
             revenueDelta: 340,
+            confidence: 0.78,
             status: 'PENDING',
           },
         ],
@@ -135,10 +144,10 @@ export default function Dashboard({ siteId }: DashboardProps) {
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <GrowthScoreCard score={data.growthScore} />
-          <PerformanceCard metrics={data.performanceMetrics} />
+          <GrowthScoreCard score={data.growthScore || 0} />
+          <PerformanceCard metrics={data.performanceMetrics || { currentScore: 0, previousScore: 0, trend: 'flat' }} />
           <OpportunitiesCard opportunities={data.opportunities} />
-          <RevenueCard recentPRs={data.recentPRs} />
+          <RevenueCard recentPRs={data.recentPRs || []} />
         </div>
 
         {/* Charts Section */}
@@ -149,8 +158,8 @@ export default function Dashboard({ siteId }: DashboardProps) {
 
         {/* Recent Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <RecentPRsTable recentPRs={data.recentPRs} />
-          <CompetitorAnalysis competitors={data.competitorAnalysis} />
+          <RecentPRsTable recentPRs={data.recentPRs || []} />
+          <CompetitorAnalysis competitors={data.competitorAnalysis || []} />
         </div>
       </div>
     </div>
@@ -188,6 +197,7 @@ function GrowthScoreCard({ score }: { score: number }) {
 }
 
 function PerformanceCard({ metrics }: { metrics: DashboardData['performanceMetrics'] }) {
+  if (!metrics) return null;
   const TrendIcon = metrics.trend === 'up' ? TrendingUp : metrics.trend === 'down' ? TrendingDown : Minus;
   const trendColor = metrics.trend === 'up' ? 'text-success-dark' : metrics.trend === 'down' ? 'text-error-dark' : 'text-text-dark-secondary';
 
@@ -237,6 +247,7 @@ function OpportunitiesCard({ opportunities }: { opportunities: DashboardData['op
 }
 
 function RevenueCard({ recentPRs }: { recentPRs: DashboardData['recentPRs'] }) {
+  if (!recentPRs) return null;
   const totalImpact = recentPRs.reduce((sum, pr) => sum + pr.impact, 0);
   const mergedPRs = recentPRs.filter(pr => pr.status === 'merged').length;
 
@@ -313,6 +324,7 @@ function PerformanceTrendChart() {
 }
 
 function RecentPRsTable({ recentPRs }: { recentPRs: DashboardData['recentPRs'] }) {
+  if (!recentPRs) return null;
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'merged':
@@ -351,6 +363,7 @@ function RecentPRsTable({ recentPRs }: { recentPRs: DashboardData['recentPRs'] }
 }
 
 function CompetitorAnalysis({ competitors }: { competitors: DashboardData['competitorAnalysis'] }) {
+  if (!competitors) return null;
   return (
     <div className="bg-surface-dark rounded-2xl p-6 border border-border-dark">
       <h3 className="text-lg font-semibold text-dark-50 mb-4">Competitor Analysis</h3>
