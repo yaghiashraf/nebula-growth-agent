@@ -62,7 +62,7 @@ export default function LandingPage() {
       name: "Sarah Chen",
       role: "Growth Lead at TechFlow",
       company: "TechFlow",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b550?w=64&h=64&fit=crop&crop=face",
+      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=64&h=64&fit=crop&crop=face",
       quote: "Nebula saved us 15 hours per week on optimization tasks. Our conversion rate increased 34% in the first month.",
       metrics: "+34% conversion rate"
     },
