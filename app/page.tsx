@@ -33,6 +33,30 @@ export default function LandingPage() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [showDemo, setShowDemo] = useState(false);
 
+  // Navigation helpers
+  const handleStartFreeTrial = () => {
+    // In a real app, this would navigate to signup page or trigger signup modal
+    window.location.href = '/signup';
+  };
+
+  const handleScheduleDemo = () => {
+    // In a real app, this would navigate to demo booking page
+    window.location.href = '/demo';
+  };
+
+  const handlePlanSelection = (planName: string) => {
+    if (planName === 'Starter') {
+      // Handle free plan signup
+      handleStartFreeTrial();
+    } else if (planName === 'Pro' || planName === 'Agency') {
+      // Navigate to pricing page for Stripe checkout
+      window.location.href = '/pricing';
+    } else {
+      // Enterprise - contact sales
+      window.location.href = '/contact';
+    }
+  };
+
   const testimonials = [
     {
       name: "Sarah Chen",
@@ -165,7 +189,10 @@ export default function LandingPage() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                <button className="bg-gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-all transform hover:scale-105 flex items-center">
+                <button 
+                  onClick={handleStartFreeTrial}
+                  className="bg-gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-all transform hover:scale-105 flex items-center"
+                >
                   Start Free Trial
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </button>
@@ -489,11 +516,14 @@ export default function LandingPage() {
                   ))}
                 </ul>
                 
-                <button className={`w-full py-3 rounded-xl font-semibold transition-all ${
-                  plan.popular 
-                    ? 'bg-gradient-primary text-white hover:opacity-90' 
-                    : 'border border-border-dark text-text-dark hover:bg-dark-800'
-                }`}>
+                <button 
+                  onClick={() => handlePlanSelection(plan.name)}
+                  className={`w-full py-3 rounded-xl font-semibold transition-all ${
+                    plan.popular 
+                      ? 'bg-gradient-primary text-white hover:opacity-90' 
+                      : 'border border-border-dark text-text-dark hover:bg-dark-800'
+                  }`}
+                >
                   {plan.cta}
                 </button>
               </div>
@@ -536,11 +566,17 @@ export default function LandingPage() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-            <button className="bg-gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-all transform hover:scale-105 flex items-center">
+            <button 
+              onClick={handleStartFreeTrial}
+              className="bg-gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-all transform hover:scale-105 flex items-center"
+            >
               Start Free Trial
               <ArrowRight className="w-5 h-5 ml-2" />
             </button>
-            <button className="border border-border-dark text-text-dark px-8 py-4 rounded-xl text-lg font-semibold hover:bg-surface-dark transition-colors">
+            <button 
+              onClick={handleScheduleDemo}
+              className="border border-border-dark text-text-dark px-8 py-4 rounded-xl text-lg font-semibold hover:bg-surface-dark transition-colors"
+            >
               Schedule Demo
             </button>
           </div>
@@ -565,6 +601,11 @@ export default function LandingPage() {
 function DemoModal({ onClose }: { onClose: () => void }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
+
+  // Navigation helper
+  const handleStartFreeTrial = () => {
+    window.location.href = '/signup';
+  };
 
   const demoSteps = [
     {
@@ -807,7 +848,10 @@ function DemoModal({ onClose }: { onClose: () => void }) {
             <p className="text-text-dark-secondary mb-4">
               Ready to see these results on your website?
             </p>
-            <button className="bg-gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-all transform hover:scale-105 flex items-center mx-auto">
+            <button 
+              onClick={handleStartFreeTrial}
+              className="bg-gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-all transform hover:scale-105 flex items-center mx-auto"
+            >
               Start Free Trial
               <ArrowRight className="w-5 h-5 ml-2" />
             </button>

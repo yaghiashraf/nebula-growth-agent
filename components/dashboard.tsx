@@ -15,6 +15,17 @@ export default function Dashboard({ siteId }: DashboardProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Navigation helpers
+  const handleRunAnalysis = () => {
+    // In a real app, this would trigger a new analysis
+    // For now, we'll refresh the dashboard data
+    fetchDashboardData();
+  };
+
+  const handleSettings = () => {
+    window.location.href = '/settings';
+  };
+
   useEffect(() => {
     fetchDashboardData();
   }, [siteId]);
@@ -133,10 +144,16 @@ export default function Dashboard({ siteId }: DashboardProps) {
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold text-dark-50">Growth Dashboard</h1>
           <div className="flex items-center space-x-4">
-            <button className="bg-gradient-primary text-white px-4 py-2 rounded-xl hover:opacity-90 transition-opacity">
+            <button 
+              onClick={handleRunAnalysis}
+              className="bg-gradient-primary text-white px-4 py-2 rounded-xl hover:opacity-90 transition-opacity"
+            >
               Run Analysis
             </button>
-            <button className="border border-border-dark text-text-dark px-4 py-2 rounded-xl hover:bg-surface-dark transition-colors">
+            <button 
+              onClick={handleSettings}
+              className="border border-border-dark text-text-dark px-4 py-2 rounded-xl hover:bg-surface-dark transition-colors"
+            >
               Settings
             </button>
           </div>

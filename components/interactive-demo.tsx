@@ -22,6 +22,15 @@ export default function InteractiveDemo() {
   const [currentStep, setCurrentStep] = useState(0);
   const [progress, setProgress] = useState(0);
 
+  // Navigation helpers
+  const handleStartFreeTrial = () => {
+    window.location.href = '/signup';
+  };
+
+  const handleScheduleDemo = () => {
+    window.location.href = '/demo';
+  };
+
   const demoSteps = [
     {
       id: 'crawl',
@@ -362,10 +371,16 @@ export default function InteractiveDemo() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-opacity">
+            <button 
+              onClick={handleStartFreeTrial}
+              className="bg-gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-opacity"
+            >
               Start Your Free Trial
             </button>
-            <button className="border border-border-dark text-text-dark px-8 py-4 rounded-xl text-lg font-semibold hover:bg-surface-dark transition-colors">
+            <button 
+              onClick={handleScheduleDemo}
+              className="border border-border-dark text-text-dark px-8 py-4 rounded-xl text-lg font-semibold hover:bg-surface-dark transition-colors"
+            >
               Schedule Live Demo
             </button>
           </div>

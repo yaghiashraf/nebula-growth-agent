@@ -23,14 +23,14 @@ export default function Header() {
       name: 'Product', 
       href: '#',
       dropdown: [
-        { name: 'Features', href: '#features', description: 'Complete growth automation suite' },
-        { name: 'Demo', href: '#demo', description: 'See Nebula in action' },
-        { name: 'Integrations', href: '#integrations', description: 'GitHub, GA4, Slack & more' },
+        { name: 'Features', href: '/#features', description: 'Complete growth automation suite' },
+        { name: 'Demo', href: '/demo', description: 'See Nebula in action' },
+        { name: 'Integrations', href: '/integrations', description: 'GitHub, GA4, Slack & more' },
         { name: 'API', href: '/api', description: 'Developer documentation' }
       ]
     },
-    { name: 'Pricing', href: '#pricing' },
-    { name: 'Customers', href: '#customers' },
+    { name: 'Pricing', href: '/pricing' },
+    { name: 'Customers', href: '/#customers' },
     { name: 'Resources', href: '#', dropdown: [
       { name: 'Documentation', href: '/docs', description: 'Setup guides and tutorials' },
       { name: 'Blog', href: '/blog', description: 'Growth tips and case studies' },

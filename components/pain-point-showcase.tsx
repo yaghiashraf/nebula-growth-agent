@@ -18,6 +18,15 @@ export default function PainPointShowcase({ painPoints }: PainPointShowcaseProps
   const [currentPain, setCurrentPain] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
+  // Navigation helpers
+  const handleSeeHowNebula = () => {
+    window.location.href = '/demo';
+  };
+
+  const handleCalculateGrowthTax = () => {
+    window.location.href = '/calculator';
+  };
+
   useEffect(() => {
     setIsVisible(true);
     
@@ -216,10 +225,16 @@ export default function PainPointShowcase({ painPoints }: PainPointShowcaseProps
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-opacity">
+            <button 
+              onClick={handleSeeHowNebula}
+              className="bg-gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-opacity"
+            >
               See How Nebula Fixes This
             </button>
-            <button className="border border-border-dark text-text-dark px-8 py-4 rounded-xl text-lg font-semibold hover:bg-surface-dark transition-colors">
+            <button 
+              onClick={handleCalculateGrowthTax}
+              className="border border-border-dark text-text-dark px-8 py-4 rounded-xl text-lg font-semibold hover:bg-surface-dark transition-colors"
+            >
               Calculate Your Growth Tax
             </button>
           </div>

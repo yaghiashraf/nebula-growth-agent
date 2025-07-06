@@ -1,11 +1,68 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { Zap, Shield, Heart, Globe, Twitter, Github, Linkedin, Mail } from 'lucide-react';
+import { Zap, Shield, Heart, Globe, Twitter, Github, Linkedin, Mail, CheckCircle, AlertCircle } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState('');
+  const [subscriptionStatus, setSubscriptionStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showCookieNotice, setShowCookieNotice] = useState(false);
+
+  // Check if cookie consent is needed on component mount
+  React.useEffect(() => {
+    const consentGiven = localStorage.getItem('cookie-consent');
+    if (!consentGiven) {
+      setShowCookieNotice(true);
+    }
+  }, []);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      setSubscriptionStatus('error');
+      setErrorMessage('Please enter a valid email address');
+      return;
+    }
+
+    setSubscriptionStatus('loading');
+    
+    try {
+      // In a real app, this would call your newsletter API
+      // For now, we'll simulate a successful subscription
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      setSubscriptionStatus('success');
+      setEmail('');
+      
+      // Reset success message after 3 seconds
+      setTimeout(() => {
+        setSubscriptionStatus('idle');
+      }, 3000);
+    } catch (error) {
+      setSubscriptionStatus('error');
+      setErrorMessage('Failed to subscribe. Please try again.');
+    }
+  };
+
+  const handleAcceptCookies = () => {
+    localStorage.setItem('cookie-consent', 'accepted');
+    setShowCookieNotice(false);
+    
+    // In a real app, you would initialize analytics here
+    // Example: initializeGoogleAnalytics();
+  };
+
+  const handleCustomizeCookies = () => {
+    // In a real app, this would open a cookie preferences modal
+    // For now, we'll navigate to the cookie policy page
+    window.location.href = '/cookies';
+  };
 
   const footerSections = [
     {
@@ -83,16 +140,66 @@ export default function Footer() {
               </p>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="bg-dark-800 border border-border-dark rounded-xl px-4 py-3 text-dark-50 placeholder-text-dark-secondary focus:outline-none focus:ring-2 focus:ring-primary-dark min-w-80"
-              />
-              <button className="bg-gradient-primary text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity whitespace-nowrap">
-                Subscribe
+            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+              <div className="relative">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className={`bg-dark-800 border rounded-xl px-4 py-3 text-dark-50 placeholder-text-dark-secondary focus:outline-none focus:ring-2 min-w-80 ${
+                    subscriptionStatus === 'error' 
+                      ? 'border-error-dark focus:ring-error-dark' 
+                      : 'border-border-dark focus:ring-primary-dark'
+                  }`}
+                  disabled={subscriptionStatus === 'loading'}
+                />
+                {subscriptionStatus === 'success' && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <CheckCircle className="w-5 h-5 text-success-dark" />
+                  </div>
+                )}
+                {subscriptionStatus === 'error' && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <AlertCircle className="w-5 h-5 text-error-dark" />
+                  </div>
+                )}
+              </div>
+              <button 
+                type="submit"
+                disabled={subscriptionStatus === 'loading'}
+                className={`px-6 py-3 rounded-xl font-semibold transition-opacity whitespace-nowrap flex items-center justify-center min-w-32 ${
+                  subscriptionStatus === 'success'
+                    ? 'bg-success-dark text-white'
+                    : 'bg-gradient-primary text-white hover:opacity-90'
+                }`}
+              >
+                {subscriptionStatus === 'loading' ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Subscribing...
+                  </>
+                ) : subscriptionStatus === 'success' ? (
+                  <>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Subscribed!
+                  </>
+                ) : (
+                  'Subscribe'
+                )}
               </button>
-            </div>
+            </form>
+            
+            {subscriptionStatus === 'error' && errorMessage && (
+              <div className="mt-2 text-sm text-error-dark">
+                {errorMessage}
+              </div>
+            )}
+            {subscriptionStatus === 'success' && (
+              <div className="mt-2 text-sm text-success-dark">
+                🎉 Thanks for subscribing! You'll receive weekly growth insights.
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -214,30 +321,32 @@ export default function Footer() {
       </div>
 
       {/* GDPR Notice */}
-      <div id="cookie-notice" className="fixed bottom-0 left-0 right-0 bg-dark-900 border-t border-border-dark p-4 z-40 hidden">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between">
-          <div className="text-sm text-text-dark-secondary mb-4 md:mb-0">
-            We use cookies to enhance your experience and analyze site usage. 
-            <Link href="/cookies" className="text-primary-dark hover:text-primary-light ml-1">
-              Learn more
-            </Link>
-          </div>
-          <div className="flex space-x-4">
-            <button 
-              id="accept-cookies"
-              className="bg-gradient-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
-            >
-              Accept All
-            </button>
-            <button 
-              id="customize-cookies"
-              className="border border-border-dark text-text-dark px-4 py-2 rounded-lg text-sm font-medium hover:bg-dark-800 transition-colors"
-            >
-              Customize
-            </button>
+      {showCookieNotice && (
+        <div className="fixed bottom-0 left-0 right-0 bg-dark-900 border-t border-border-dark p-4 z-40 animate-in slide-in-from-bottom duration-300">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between">
+            <div className="text-sm text-text-dark-secondary mb-4 md:mb-0">
+              We use cookies to enhance your experience and analyze site usage. 
+              <Link href="/cookies" className="text-primary-dark hover:text-primary-light ml-1">
+                Learn more
+              </Link>
+            </div>
+            <div className="flex space-x-4">
+              <button 
+                onClick={handleAcceptCookies}
+                className="bg-gradient-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
+              >
+                Accept All
+              </button>
+              <button 
+                onClick={handleCustomizeCookies}
+                className="border border-border-dark text-text-dark px-4 py-2 rounded-lg text-sm font-medium hover:bg-dark-800 transition-colors"
+              >
+                Customize
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Made with Love */}
       <div className="bg-dark-950 py-3">
