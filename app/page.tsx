@@ -321,7 +321,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Grid */}
-      <section className="py-20">
+      <section id="features" className="py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-dark-50">
@@ -352,7 +352,7 @@ export default function LandingPage() {
       </section>
 
       {/* Social Proof */}
-      <section className="py-20 bg-surface-dark">
+      <section id="customers" className="py-20 bg-surface-dark">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-dark-50">
