@@ -122,7 +122,7 @@ export default function Header() {
               href="/signup"
               className="bg-gradient-primary text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity"
             >
-              Start Free Trial
+              Find Revenue Leaks
             </Link>
           </div>
 
@@ -189,7 +189,7 @@ export default function Header() {
                     className="block bg-gradient-primary text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity text-center"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Start Free Trial
+                    Find Revenue Leaks
                   </Link>
                 </div>
               </div>

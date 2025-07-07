@@ -165,12 +165,12 @@ export default function PricingPage() {
             </div>
             
             <h1 className="text-4xl md:text-6xl font-bold mb-6 text-dark-50">
-              Choose Your <span className="text-gradient">Growth Plan</span>
+              Stop Losing Money to <span className="text-gradient">Hidden Revenue Leaks</span>
             </h1>
             
             <p className="text-xl text-text-dark-secondary max-w-3xl mx-auto mb-8">
-              From solo founders to enterprise teams—there's a plan that scales with your ambition. 
-              Start free, upgrade when you're ready to scale.
+              Every day you wait, competitors pull ahead and revenue leaks get worse. 
+              <strong className="text-dark-50">Join 500+ teams</strong> who've recovered millions in lost revenue.
             </p>
 
             {/* Billing Toggle */}
@@ -383,26 +383,30 @@ export default function PricingPage() {
         <section className="py-20 bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900">
           <div className="max-w-4xl mx-auto px-6 text-center">
             <h2 className="text-3xl md:text-5xl font-bold mb-6 text-dark-50">
-              Ready to <span className="text-gradient">Automate Your Growth</span>?
+              How Much Revenue Will You <span className="text-gradient">Lose Tomorrow</span>?
             </h2>
             <p className="text-xl text-text-dark-secondary mb-8 max-w-2xl mx-auto">
-              Join 500+ growth teams who've automated their optimization workflow. 
-              Start your free trial today—no credit card required.
+              Every day costs you $200-500 in hidden revenue leaks. <strong className="text-dark-50">500+ teams</strong> have already stopped the bleeding and recovered <strong className="text-success-dark">$2.1M+ total</strong>. 
+              Your turn.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="#pro"
+                href="/signup"
                 className="bg-gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-opacity"
               >
-                Start 14-Day Free Trial
+                Stop the Revenue Bleeding
               </a>
               <a
                 href="/demo"
                 className="border border-border-dark text-text-dark px-8 py-4 rounded-xl text-lg font-semibold hover:bg-surface-dark transition-colors"
               >
-                Schedule Demo
+                See $12k Recovery Demo
               </a>
+            </div>
+            
+            <div className="text-center text-sm text-text-dark-secondary mt-6">
+              ⚡ Setup takes 5 minutes • Find issues in first 24 hours • <strong>Guarantee:</strong> Find $1k+ issues or your money back
             </div>
           </div>
         </section>

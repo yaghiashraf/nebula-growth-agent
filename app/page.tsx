@@ -63,24 +63,24 @@ export default function LandingPage() {
       role: "Growth Lead at TechFlow",
       company: "TechFlow",
       avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=64&h=64&fit=crop&crop=face",
-      quote: "Nebula saved us 15 hours per week on optimization tasks. Our conversion rate increased 34% in the first month.",
-      metrics: "+34% conversion rate"
+      quote: "I was burning out from manual optimization work—15+ hours weekly just on A/B testing and performance monitoring. Nebula found revenue leaks worth $47k/year that I completely missed. Now I focus on strategy while it handles the grunt work.",
+      metrics: "+34% conversion • $47k recovered"
     },
     {
       name: "Marcus Rodriguez",
       role: "Founder",
       company: "StartupBoost",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face", 
-      quote: "The AI caught performance issues our team missed. We went from 2.1s to 0.8s page load time automatically.",
-      metrics: "+162% faster loading"
+      quote: "Our checkout was hemorrhaging customers and I had no idea why. Nebula identified the exact bottleneck in 2 hours—something my team and expensive consultants missed for months. Fixed it automatically and saved our Q4.",
+      metrics: "+162% faster • $23k saved"
     },
     {
       name: "Emily Watson",
       role: "Marketing Director",
       company: "EcomGrow",
       avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face",
-      quote: "The competitor analysis feature is incredible. We implemented 5 critical changes that boosted revenue by $12k/month.",
-      metrics: "+$12k monthly revenue"
+      quote: "Competitors were eating our lunch with better pricing pages and I was panicking. Nebula showed me exactly what they were doing differently and automatically implemented the improvements. We're back to beating them consistently.",
+      metrics: "+$12k monthly • Outrank competitors"
     }
   ];
 
@@ -98,66 +98,66 @@ export default function LandingPage() {
   const painPoints = [
     {
       icon: Clock,
-      title: "Endless Manual Optimization",
-      description: "Spending 10+ hours weekly juggling GA4, PageSpeed, and competitor research tools",
-      cost: "10 hrs/week = $2,000/month in opportunity cost"
+      title: "Drowning in Busywork",
+      description: "You're burning 15+ hours weekly manually checking GA4, running PageSpeed tests, and stalking competitor sites while real strategy work piles up",
+      cost: "$3,200/month in your time + massive opportunity cost"
     },
     {
       icon: AlertTriangle,
-      title: "Missing Revenue-Killing Issues",
-      description: "Performance drops and conversion leaks go unnoticed until it's too late",
-      cost: "Average site loses $5,000/month from undetected issues"
+      title: "Bleeding Money While You Sleep",
+      description: "Right now, checkout bugs, slow pages, and broken forms are costing you sales. You won't know until it's too late and thousands are already lost",
+      cost: "Average $8,500/month in undetected revenue leaks"
     },
     {
       icon: Users,
-      title: "Falling Behind Competitors",
-      description: "Rivals silently improve pricing, copy, and features while you stay static",
-      cost: "Competitor advantages compound 15-20% annually"
+      title: "Competitors Eating Your Lunch",
+      description: "While you're stuck in manual optimization hell, smart competitors are pulling ahead with better pricing, copy, and features. The gap widens daily",
+      cost: "15-25% market share erosion annually"
     },
     {
       icon: Coffee,
-      title: "Growth Team Burnout",
-      description: "Talented people stuck on repetitive tasks instead of strategic initiatives",
-      cost: "Top growth talent turnover costs $150k+ per hire"
+      title: "Your Team Is Quitting",
+      description: "Top growth talent didn't sign up to be human refresh buttons. They want to build strategy, not waste time on mind-numbing optimization tasks",
+      cost: "$200k+ per resignation + 6 months to replace"
     }
   ];
 
   const features = [
     {
       icon: Bot,
-      title: "AI-Powered Analysis",
-      description: "Claude AI analyzes your site vs competitors, identifying high-impact opportunities with revenue estimates",
-      benefit: "Find $10k+ monthly opportunities automatically"
+      title: "Never Miss Revenue Again",
+      description: "While you sleep, AI scans your site and competitors, finding the exact revenue leaks costing you thousands monthly",
+      benefit: "Recover $10k+ monthly in hidden opportunities"
     },
     {
       icon: GitPullRequest,
-      title: "Automated Pull Requests",
-      description: "GitHub integration creates ready-to-merge code changes with A/B test suggestions",
-      benefit: "Deploy optimizations in minutes, not days"
+      title: "Zero-Effort Optimization",
+      description: "Stop writing optimization code. Nebula automatically creates tested improvements and deploys them to your site",
+      benefit: "Go from idea to live improvement in 10 minutes"
     },
     {
       icon: Shield,
-      title: "Performance Guardrails",
-      description: "Lighthouse monitoring prevents regressions with automatic rollback protection",
-      benefit: "Never sacrifice speed for features again"
+      title: "No More Breaking Changes",
+      description: "Tired of launches that tank performance? Automatic safety checks ensure every change makes your site faster",
+      benefit: "Deploy fearlessly without breaking anything"
     },
     {
       icon: Globe,
-      title: "Competitor Intelligence",
-      description: "Track rival site changes and automatically respond with counter-optimizations",
-      benefit: "Stay ahead of competition 24/7"
+      title: "Beat Competitors on Autopilot",
+      description: "Stop manually stalking competitor sites. Get instant alerts when they improve and automatically implement counters",
+      benefit: "Never fall behind competition again"
     },
     {
       icon: BarChart3,
-      title: "Revenue Impact Tracking",
-      description: "ML models predict monthly revenue delta for each optimization before deployment",
-      benefit: "Prioritize changes by business impact"
+      title: "Know Your ROI Before You Deploy",
+      description: "End the guesswork. See exactly how much revenue each optimization will generate before going live",
+      benefit: "Only ship changes that make money"
     },
     {
       icon: Rocket,
-      title: "Dark Mode Dashboard",
-      description: "Beautiful, responsive interface optimized for growth teams and agencies",
-      benefit: "Modern UX that scales with your business"
+      title: "Growth Dashboard That Actually Helps",
+      description: "Skip the vanity metrics. See real revenue impact, optimization status, and what's working—all in one place",
+      benefit: "Make decisions based on money, not metrics"
     }
   ];
 
@@ -175,17 +175,17 @@ export default function LandingPage() {
             <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <div className="inline-flex items-center bg-gradient-primary text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
                 <Zap className="w-4 h-4 mr-2" />
-                Autonomous Website Optimization
+                The World's First Autonomous Growth Agent
               </div>
               
               <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-dark-50 via-primary-dark to-secondary-dark bg-clip-text text-transparent leading-tight">
-                Wake Up to a<br />
-                <span className="text-gradient">Faster, Better Website</span>
+                Stop Losing $10k+/Month<br />
+                <span className="text-gradient">While You Sleep</span>
               </h1>
               
               <p className="text-xl md:text-2xl text-text-dark-secondary mb-8 max-w-3xl mx-auto leading-relaxed">
-                Nebula Growth Agent <strong>autonomously detects, decides, and deploys</strong> website optimizations while you sleep. 
-                No dashboards, no tickets—just continuous growth.
+                Nebula finds revenue-killing issues on your website and <strong>automatically fixes them</strong> with zero human intervention. 
+                Join 500+ companies recovering $12k+ monthly from issues they never knew existed.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -193,7 +193,7 @@ export default function LandingPage() {
                   onClick={handleStartFreeTrial}
                   className="bg-gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-all transform hover:scale-105 flex items-center"
                 >
-                  Start Free Trial
+                  Find My Hidden Revenue Leaks
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </button>
                 <button 
@@ -201,22 +201,27 @@ export default function LandingPage() {
                   className="border border-border-dark text-text-dark px-8 py-4 rounded-xl text-lg font-semibold hover:bg-surface-dark transition-colors flex items-center"
                 >
                   <Play className="w-5 h-5 mr-2" />
-                  Watch Demo
+                  See $12k Recovery Demo
                 </button>
               </div>
               
-              <div className="flex flex-wrap justify-center items-center gap-8 text-text-dark-secondary">
+              <div className="text-center text-sm text-text-dark-secondary mb-8">
+                ✅ Free 14-day trial • No credit card required • Cancel anytime<br />
+                <strong className="text-dark-50">500+ companies</strong> already recovered <strong className="text-success-dark">$2.1M+ in lost revenue</strong>
+              </div>
+              
+              <div className="flex flex-wrap justify-center items-center gap-8 text-text-dark-secondary text-xs">
                 <div className="flex items-center">
-                  <Check className="w-5 h-5 text-success-dark mr-2" />
-                  14-day free trial
+                  <Shield className="w-4 h-4 text-success-dark mr-2" />
+                  SOC 2 Certified
                 </div>
                 <div className="flex items-center">
-                  <Check className="w-5 h-5 text-success-dark mr-2" />
-                  No credit card required
+                  <Star className="w-4 h-4 text-warning-dark mr-2" />
+                  4.9/5 Customer Rating
                 </div>
                 <div className="flex items-center">
-                  <Check className="w-5 h-5 text-success-dark mr-2" />
-                  Setup in 5 minutes
+                  <Users className="w-4 h-4 text-primary-dark mr-2" />
+                  500+ Teams Trust Us
                 </div>
               </div>
             </div>
